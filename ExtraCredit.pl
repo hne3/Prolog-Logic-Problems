@@ -17,7 +17,7 @@ Sol = [[Doctor, Practice, Time, Length],...]
 practices([physician, dentist, optometrist, chiropractor]).
 doctors([borne, bigelow, swan, mann]).
 times([900, 1130, 100, 330]).
-lengths([30, 300, 60, 600]). % NOTE: Since duplicate values make Prolog programming more complex, I chose to give the two 30-minute time slots and
+lengths([30, 300, 60, 600]). % PLEASE NOTE: Since duplicate values make Prolog programming more complex, I chose to give the two 30-minute time slots and
 % the two 60-minute time slots two seperate values. However, both 30 and 300 represent 30 minute time slots; likewise with 60 and 600.
 
 
@@ -45,7 +45,7 @@ member([_,_,_,30],Sol),
 member([_,_,_,300],Sol),
 
 % 2. Her appointment with Dr. Swan was scheduled for half an hour.
-(member([swan,_,_,30], Sol) ; member([swan,_,_,300])),
+(member([swan,_,_,30], Sol) ; member([swan,_,_,300], Sol)),
 
 % 3. Dr. Bigelow was the physician.
 member([bigelow, physician,_,_], Sol),
@@ -55,8 +55,9 @@ member([bigelow, physician,_,_], Sol),
 
 % 5. She saw her chiropractor before Dr. Swan but after her appointment with Dr. Mann.
 % Alternately, she saw her chiropractor between two other times, meaning at 1130 (between 900 and 100)
-% or 100 (between 1130 and 300).
-(member([_,chiropractor,100,_], Sol) ; member([_,chiropractor,1130,_],Sol)),
+% or 100 (between 1130 and 330).
+((member([mann,_,1130,_], Sol), member([_,chiropractor,100,_], Sol), member([swan,_,330,_],Sol)) ;
+(member([mann,_,900,_],Sol), member([_,chiropractor,1130,_],Sol), member([swan,_,100,_],Sol))),
 
 % 6. Her appointment with Dr. Mann wasn't at 9:00 am.
 (member([mann,_,100,_], Sol) ; member([mann,_,1130,_],Sol) ; member([mann,_,330,_],Sol)),
