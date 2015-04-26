@@ -13,11 +13,12 @@
 6. Her appointment with Dr. Mann wasn't at 9:00 am.
 Sol = [[Doctor, Practice, Time, Length],...]
 */
-% verify([[mann,dentist,1130,60],[swan,optometrist,330,30],[borne,chiropractor,100,60],[bigelow,physician,900,30]]).
+
 practices([physician, dentist, optometrist, chiropractor]).
 doctors([borne, bigelow, swan, mann]).
 times([900, 1130, 100, 330]).
-lengths([30, 60]).
+lengths([30, 300, 60, 600]). % NOTE: Since duplicate values make Prolog programming more complex, I chose to give the two 30-minute time slots and
+% the two 60-minute time slots two seperate values. However, both 30 and 300 represent 30 minute time slots; likewise with 60 and 600.
 
 
 myremove(X,[X|T],T). % Procedure also comes from the below library.
@@ -34,18 +35,17 @@ Sol=[[D1, P1, T1, L1],
 [D4, P4, T4, L4]
 ],
 
-
 % 1. Sara's one-hour appointments were scheduled with Dr. Borne and the dentist.
 
 member([borne,_,_,60], Sol),
-member([_,dentist,_,60], Sol),
+member([_,dentist,_,600], Sol),
+
 % So her half-hour appointments were
-member([T1,_,_,30],Sol),
-member([T2,_,_,30],Sol),
-T1 \== T2,
+member([_,_,_,30],Sol),
+member([_,_,_,300],Sol),
 
 % 2. Her appointment with Dr. Swan was scheduled for half an hour.
-member([swan,_,_,30], Sol),
+(member([swan,_,_,30], Sol) ; member([swan,_,_,300])),
 
 % 3. Dr. Bigelow was the physician.
 member([bigelow, physician,_,_], Sol),
@@ -60,7 +60,6 @@ member([bigelow, physician,_,_], Sol),
 
 % 6. Her appointment with Dr. Mann wasn't at 9:00 am.
 (member([mann,_,100,_], Sol) ; member([mann,_,1130,_],Sol) ; member([mann,_,330,_],Sol)),
-
 
 set_equal([D1,D2,D3,D4],D),
 set_equal([P1,P2,P3,P4],P),
